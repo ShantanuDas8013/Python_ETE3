@@ -8,46 +8,23 @@ from datetime import datetime
 import base64
 from io import BytesIO
 
-# Cache the placeholder sports images to avoid reloading
-@st.cache_data
 def get_placeholder_sports_images():
-    """Get placeholder sports images for each sport from local sample_images folder"""
-    sport_image_files = {
-        "Basketball": "Basketball.jpeg",
-        "Tennis": "Tennis.jpeg",
-        "Football": "Football.jpeg",
-        "Cricket": "Cricket.jpeg",
+    """Return a dictionary of placeholder images for each sport"""
+    # Create simple colored rectangles as placeholders
+    sports_colors = {
+        "Basketball": "orange",
+        "Cricket": "green",
+        "Football": "blue"
     }
     
-    sport_images = {}
-    # Use absolute path for sample_images directory
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    sample_images_dir = os.path.join(current_dir, "sample_images")
+    images = {}
+    for sport, color in sports_colors.items():
+        img = Image.new('RGB', (300, 200), color)
+        draw = ImageDraw.Draw(img)
+        draw.text((150, 100), sport, fill="white", anchor="mm")
+        images[sport] = img
     
-    # Create sample_images directory if it doesn't exist
-    if not os.path.exists(sample_images_dir):
-        os.makedirs(sample_images_dir)
-        st.error(f"""
-        Sample images folder not found. Please:
-        1. Create a folder named 'sample_images' at: {sample_images_dir}
-        2. Add the following image files: {', '.join(sport_image_files.values())}
-        """)
-        
-    for sport, filename in sport_image_files.items():
-        image_path = os.path.join(sample_images_dir, filename)
-        try:
-            if os.path.exists(image_path):
-                img = Image.open(image_path)
-                sport_images[sport] = img
-                st.success(f"Successfully loaded {filename}")
-            else:
-                st.warning(f"Missing image file: {filename}")
-                sport_images[sport] = create_text_image(f"Missing {filename}")
-        except Exception as e:
-            st.error(f"Error loading {filename}: {str(e)}")
-            sport_images[sport] = create_text_image(f"Error loading {filename}")
-    
-    return sport_images
+    return images
 
 def create_text_image(text, size=(300, 200)):
     """Create a simple image with text for placeholders"""
