@@ -15,7 +15,8 @@ def get_placeholder_sports_images():
     sport_image_files = {
         "Basketball": "Basketball.jpeg",
         "Tennis": "Tennis.jpeg",
-        "Chess": "Chess.jpeg",
+        "Football": "Football.jpeg",
+        "Cricket": "Cricket.jpeg",
     }
     
     sport_images = {}
